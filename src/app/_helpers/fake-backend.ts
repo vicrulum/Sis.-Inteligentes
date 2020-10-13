@@ -5,6 +5,7 @@ import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 
 // array in local storage for registered users
 let users = JSON.parse(localStorage.getItem('users')) || [];
+let products = JSON.parse(localStorage.getItem('products')) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -28,6 +29,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getUsers();
                 case url.match(/\/users\/\d+$/) && method === 'DELETE':
                     return deleteUser();
+                //Opciones que se agregaron
+                case url.endsWith('/product') && method === 'POST':
+                    return addProduct();
+                case url.endsWith('/product') && method === 'GET':
+                        return getProducts();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -62,10 +68,27 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             return ok();
         }
+        function addProduct() {
+            const product = body
 
+            if (products.find(x => x.name === product.name)) {
+                return error('Producto "' + product.name + '" ya esta en el inventario')
+            }
+
+            product.serial_number = products.length ? Math.max(...products.map(x => x.serial_number)) + 1 : 1;
+            products.push(product);
+            localStorage.setItem('products', JSON.stringify(products));
+
+            return ok();
+        }
         function getUsers() {
             if (!isLoggedIn()) return unauthorized();
             return ok(users);
+        }
+
+        function getProducts() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(products);
         }
 
         function deleteUser() {

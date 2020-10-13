@@ -1,6 +1,8 @@
 export class Product{
-    nombre: string;
-    num: number;
-    precio: number;
-    inventario: string;
+
+    name: string;
+    quantity: number;
+    price: number;
+    serial_number: number;
+
 }

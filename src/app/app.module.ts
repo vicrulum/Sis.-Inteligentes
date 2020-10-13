@@ -17,14 +17,17 @@ import { HttpClientModule, HttpClient,  HTTP_INTERCEPTORS } from '@angular/commo
 
 import { AuthGuard } from './_helpers';
 import { ProductsComponent } from './pages/products/products.component';
-import { MatTableModule } from '@angular/material/table'
+import { MatTableModule } from '@angular/material/table';
+import { CreateproductdialogComponent } from './pages/createproductdialog/createproductdialog.component'
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material/input';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'product', component: ProductsComponent },
 
@@ -38,6 +41,8 @@ const routes: Routes = [
     RegisterComponent,
     HomeComponent,
     ProductsComponent,
+    CreateproductdialogComponent,
+
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -45,10 +50,17 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    FormsModule,
   
   ],
-  exports: [RouterModule],
+  exports: [RouterModule,
+    CreateproductdialogComponent
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -56,6 +68,7 @@ const routes: Routes = [
     // provider used to create fake backend
     fakeBackendProvider
 ],
+entryComponents:[CreateproductdialogComponent],
   bootstrap: [AppComponent],
  
 })
