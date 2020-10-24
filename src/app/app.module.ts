@@ -24,6 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
+import { EditproductdialogComponent } from './pages/editproductdialog/editproductdialog.component';
+import {MatIconModule} from '@angular/material/icon';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -42,6 +44,8 @@ const routes: Routes = [
     HomeComponent,
     ProductsComponent,
     CreateproductdialogComponent,
+    EditproductdialogComponent,
+
 
   ],
   imports: [
@@ -56,6 +60,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     MatInputModule,
     FormsModule,
+    MatIconModule,
   
   ],
   exports: [RouterModule,

@@ -7,7 +7,7 @@ import { Product } from 'src/app/models/product';
   providedIn: 'root'
 })
 export class ProductService {
-
+  dialogData: any;
   constructor(private http: HttpClient) { }
   getAll() {
     return this.http.get<Product[]>(`/product`);
@@ -20,5 +20,7 @@ add(product: Product) {
 delete(id: number) {
     return this.http.delete(`/users/${id}`);
 }
-
+updateProduct (product: Product): void {
+  this.dialogData = product;
+}
 }

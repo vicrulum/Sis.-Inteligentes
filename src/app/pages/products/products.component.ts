@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {CreateproductdialogComponent} from 'src/app/pages/createproductdialog/createproductdialog.component'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+import { EditproductdialogComponent } from '../editproductdialog/editproductdialog.component';
+
 export interface DialogData {
   animal: string;
   name: string;
@@ -20,34 +22,18 @@ export class ProductsComponent implements OnInit {
   submitted = false;
   animal: string;
   name: string;
+  dataSource: any;
+  product: Product
 
   products: Product[] = [];
 
-  ELEMENT_DATA: Product[] = [
-    {serial_number: 1,  name: 'Hydrogen', price: 1.0079, quantity: 1},
-    {serial_number: 2,  name: 'Helium', price: 4.0026, quantity: 2},
-    {serial_number: 3,  name: 'Lithium', price: 6.941, quantity: 3},
-    {serial_number: 4,  name: 'Beryllium', price: 9.0122, quantity: 4},
-    {serial_number: 5,  name: 'Boron', price: 10.811, quantity: 5},
-    {serial_number: 6,  name: 'Carbon', price: 12.0107, quantity: 6},
-    {serial_number: 7,  name: 'Nitrogen', price: 14.0067, quantity: 5},
-    {serial_number: 8,  name: 'Oxygen', price: 15.9994, quantity: 2},
-    {serial_number: 9,  name: 'Fluorine', price: 18.9984, quantity: 1},
-    {serial_number: 10,  name: 'Neon', price: 20.1797, quantity: 3},
-  ];
-
-  displayedColumns: string[] = ['No', 'Nombre', 'Precio', 'Inventario'];
-  dataSource = this.ELEMENT_DATA;
-  elements: any = [
-    {id: 1, first: 'Mark', last: 'Otto', handle: '@mdo'},
-    {id: 2, first: 'Jacob', last: 'Thornton', handle: '@fat'},
-    {id: 3, first: 'Larry', last: 'the Bird', handle: '@twitter'},
-  ];
-
+  displayedColumns: string[] = ['No', 'Nombre', 'Precio', 'Inventario', 'actions'];
+  
   headElements = ['ID', 'First', 'Last', 'Handle'];
   constructor(
     public dialog: MatDialog,
     private productService: ProductService,
+    private _changeDetector: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +44,7 @@ export class ProductsComponent implements OnInit {
   private loadAllProducts() {
     this.productService.getAll().pipe(first()).subscribe(products => {
         this.products = products;
+        this.dataSource = this.products;
     });
   }
 
@@ -71,7 +58,33 @@ export class ProductsComponent implements OnInit {
       console.log('The dialog was closed');
       this.name = result;
     });
+    this._changeDetector.detectChanges();
   }
+
+  startEdit(i: number, product, mes) {
+    console.log("i:",i)
+    console.log("product:",product)
+    console.log("name", mes)
+    product.serial_number = i;
+    // index row is used just for debugging proposes and can be removed
+  
+
+    const dialogRef = this.dialog.open(EditproductdialogComponent, {
+      data: {id: product.id, name: product.name, price: product.price, quantity: product.quantity}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+       // const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+       // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+        //this.refreshTable();
+      }
+    });
+  }
+
 
 }
 
