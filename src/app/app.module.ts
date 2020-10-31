@@ -26,12 +26,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import { EditproductdialogComponent } from './pages/editproductdialog/editproductdialog.component';
 import {MatIconModule} from '@angular/material/icon';
+import { SellsComponent } from './pages/sells/sells.component';
+import { CreateselldialogComponent } from './pages/createselldialog/createselldialog.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'product', component: ProductsComponent },
+  { path: 'ventas', component: SellsComponent },
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
@@ -45,6 +48,8 @@ const routes: Routes = [
     ProductsComponent,
     CreateproductdialogComponent,
     EditproductdialogComponent,
+    SellsComponent,
+    CreateselldialogComponent,
 
 
   ],

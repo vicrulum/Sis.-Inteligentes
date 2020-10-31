@@ -6,6 +6,7 @@ import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 // array in local storage for registered users
 let users = JSON.parse(localStorage.getItem('users')) || [];
 let products = JSON.parse(localStorage.getItem('products')) || [];
+let sells = JSON.parse(localStorage.getItem('sells')) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -29,11 +30,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getUsers();
                 case url.match(/\/users\/\d+$/) && method === 'DELETE':
                     return deleteUser();
-                //Opciones que se agregaron
+                //Opciones que se agregaron de Product
                 case url.endsWith('/product') && method === 'POST':
                     return addProduct();
                 case url.endsWith('/product') && method === 'GET':
                         return getProducts();
+                //Opciones que se agregaron de Sells
+                case url.endsWith('/ventas') && method === 'POST':
+                    return addSell();
+                case url.endsWith('/ventas') && method === 'GET':
+                        return getSells();
+                
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -81,6 +88,19 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             return ok();
         }
+        function addSell() {
+            const sell = body
+
+            if (sells.find(x => x.name === sell.name)) {
+                return error('Venta "' + sell.name + '" ya esta en el inventario')
+            }
+
+            sell.serial_number = sells.length ? Math.max(...sells.map(x => x.serial_number)) + 1 : 1;
+            sells.push(sell);
+            localStorage.setItem('sells', JSON.stringify(sells));
+
+            return ok();
+        }
         function getUsers() {
             if (!isLoggedIn()) return unauthorized();
             return ok(users);
@@ -90,7 +110,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if (!isLoggedIn()) return unauthorized();
             return ok(products);
         }
-
+        function getSells() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(sells);
+        }
         function deleteUser() {
             if (!isLoggedIn()) return unauthorized();
 

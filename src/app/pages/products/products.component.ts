@@ -7,10 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { EditproductdialogComponent } from '../editproductdialog/editproductdialog.component';
 
-export interface DialogData {
-  animal: string;
-  name: string;
-}
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -20,7 +17,6 @@ export class ProductsComponent implements OnInit {
   productForm: FormGroup;
   loading = false;
   submitted = false;
-  animal: string;
   name: string;
   dataSource: any;
   product: Product
