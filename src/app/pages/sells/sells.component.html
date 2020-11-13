@@ -1,12 +1,13 @@
 <section>
     <button mat-button color="primary" (click)="openDialog()">Registrar Venta</button>
 </section>
+
 <p *ngIf="name">
     Ultimo Venta registrado: <i>{{name}}</i>
   </p>
   
   
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="sellList" class="mat-elevation-z8">
    
     <ng-container matColumnDef="No">
       <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -47,3 +48,21 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  <mat-form-field appearance="fill">
+    <label>Productos</label>
+    <mat-select [(ngModel)]="selectedProduct" [formControl]="productForm"  multiple>
+      <mat-select-trigger>
+        {{productForm.value ? productForm.value[0] : ''}}
+        <span *ngIf="productForm.value?.length > 1" class="example-additional-selection" >
+          (+{{productForm.value.length - 1}} {{productForm.value?.length === 2 ? 'other' : 'others'}})
+        </span>
+      </mat-select-trigger>
+      <mat-option *ngFor="let product of productList" [value]="product" >{{product.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p> Productos Seleccionados: {{selectedProduct}} </p>
+  <p> Total a Pagar: {{total}} </p>
+
+  <button mat-button color="primary" (click)="SelectedProducts(selectedProduct)">Registrar Venta</button>
+

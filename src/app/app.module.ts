@@ -28,7 +28,7 @@ import { EditproductdialogComponent } from './pages/editproductdialog/editproduc
 import {MatIconModule} from '@angular/material/icon';
 import { SellsComponent } from './pages/sells/sells.component';
 import { CreateselldialogComponent } from './pages/createselldialog/createselldialog.component';
-
+import {MatSelectModule} from '@angular/material/select';
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
@@ -66,6 +66,7 @@ const routes: Routes = [
     MatInputModule,
     FormsModule,
     MatIconModule,
+    MatSelectModule,
   
   ],
   exports: [RouterModule,
