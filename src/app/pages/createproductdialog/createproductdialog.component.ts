@@ -74,8 +74,9 @@ export class CreateproductdialogComponent implements OnInit {
         if (this.productForm.invalid) {
             return;
         }
-
+        this.productForm.value.initialValue = this.productForm.value.quantity
         this.loading = true;
+        console.log("ProductForm",this.productForm.value)
         this.productService.add(this.productForm.value)
             .pipe(first())
             .subscribe(

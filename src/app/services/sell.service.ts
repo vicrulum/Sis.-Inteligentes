@@ -13,7 +13,7 @@ export class SellService {
     return this.http.get<Sell[]>(`/ventas`);
 }
 
-add(sell: Sell) {
+addSell(sell: Sell) {
   return this.http.post(`/ventas`, sell);
 }
 

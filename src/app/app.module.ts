@@ -29,12 +29,14 @@ import {MatIconModule} from '@angular/material/icon';
 import { SellsComponent } from './pages/sells/sells.component';
 import { CreateselldialogComponent } from './pages/createselldialog/createselldialog.component';
 import {MatSelectModule} from '@angular/material/select';
+import { SettingsComponent } from './pages/settings/settings.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'product', component: ProductsComponent },
   { path: 'ventas', component: SellsComponent },
+  { path: 'settings', component: SettingsComponent },
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
@@ -50,6 +52,7 @@ const routes: Routes = [
     EditproductdialogComponent,
     SellsComponent,
     CreateselldialogComponent,
+    SettingsComponent,
 
 
   ],

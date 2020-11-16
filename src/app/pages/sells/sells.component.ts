@@ -9,6 +9,7 @@ import { EditproductdialogComponent } from '../editproductdialog/editproductdial
 import { CreateselldialogComponent } from '../createselldialog/createselldialog.component';
 import { Sell } from 'src/app/models/sell';
 import { SellService } from 'src/app/services/sell.service';
+import { AlertService } from 'src/app/services/alert.service';
 @Component({
   selector: 'app-sells',
   templateUrl: './sells.component.html',
@@ -38,7 +39,8 @@ export class SellsComponent implements OnInit {
     public dialog: MatDialog,
     private sellService: SellService,
     private _changeDetector: ChangeDetectorRef,
-    private productService: ProductService,) { }
+    private productService: ProductService,
+    private alertService: AlertService) { }
     headElements = ['ID', 'First', 'Last', 'Handle'];
 
     ngOnInit(): void {
@@ -60,6 +62,7 @@ export class SellsComponent implements OnInit {
       this.sellService.getAll().pipe(first()).subscribe(sells => {
           this.sells = sells;
           this.dataSource = this.sells;
+          console.log("Allsells",)
           
       });
     }
@@ -76,18 +79,51 @@ export class SellsComponent implements OnInit {
     this._changeDetector.detectChanges();
   }
   SelectedProducts(selectedProduct){
-    console.log("selected",selectedProduct)
+   // console.log("selected",selectedProduct)
     this.total = 0
     for (let i = 0; i < selectedProduct.length; i++) {
-      console.log("price",parseInt(selectedProduct[i].price))
+      //console.log("price",parseInt(selectedProduct[i].price))
       this.newQuantity = parseInt( selectedProduct[i].quantity) -1
+      var initialQuantity = this.selectedProduct[i].initialValue / 2;
+      console.log("initialQUantity",initialQuantity)
+      if(this.newQuantity < initialQuantity){
+        console.log("EL inventario del producto:", this.selectedProduct[i].name ," ha disminuido a menos de la mitad, se enviara un correo al proveedor")
+      }
       this.total= this.total + parseInt(selectedProduct[i].price);
       selectedProduct[i].quantity = this.newQuantity
+      console.log("quantity", selectedProduct[i].quantity )
     }
+    
     this.sellList = selectedProduct;
-console.log("total",this.total)
+    console.log("sellList",this.sellList)
+ /*   this.productService.updateProducts(this.sellList)
+    .pipe(first())
+    .subscribe(
+        data => {
+            this.alertService.success('Producto Actualizado', true);
+            console.log("Producto Actualizado")
+            //this.router.navigate(['/login']);
+        },
+        error => {
+            this.alertService.error(error);
+            //this.loading = false;
+        });*/
+    /*this.sellService.addSell(this.sellList)
+    .pipe(first())
+    .subscribe(
+        data => {
+            this.alertService.success('Venta exitosa', true);
+            console.log("Venta Exitosa")
+            //this.router.navigate(['/login']);
+        },
+        error => {
+            this.alertService.error(error);
+            //this.loading = false;
+        });
 
+*/
   }
+  
 
 
 }

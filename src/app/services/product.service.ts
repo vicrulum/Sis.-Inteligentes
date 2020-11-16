@@ -23,4 +23,8 @@ delete(id: number) {
 updateProduct (product: Product): void {
   this.dialogData = product;
 }
+updateProducts(product: Product){
+  return this.http.put(`/product`, product);
+}
+
 }

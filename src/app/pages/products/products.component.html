@@ -28,7 +28,7 @@
  
   <ng-container matColumnDef="Inventario">
     <th mat-header-cell *matHeaderCellDef> Inventario </th>
-    <td mat-cell *matCellDef="let product">{{product.quantity}} </td>
+    <td mat-cell *matCellDef="let product" (change)="newQuantity(product.quantity)">{{product.quantity}} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">

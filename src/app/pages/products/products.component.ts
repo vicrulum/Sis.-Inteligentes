@@ -81,7 +81,10 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  newQuantity(newQuantity){
+    console.log("newQ",newQuantity)
 
+  }
 }
 
 

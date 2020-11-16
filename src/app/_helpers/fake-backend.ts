@@ -7,6 +7,7 @@ import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 let users = JSON.parse(localStorage.getItem('users')) || [];
 let products = JSON.parse(localStorage.getItem('products')) || [];
 let sells = JSON.parse(localStorage.getItem('sells')) || [];
+let settings = JSON.parse(localStorage.getItem('settings')) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -34,13 +35,21 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 case url.endsWith('/product') && method === 'POST':
                     return addProduct();
                 case url.endsWith('/product') && method === 'GET':
-                        return getProducts();
+                    return getProducts();
+                case url.endsWith('/product') && method === 'PUT':
+                    return updateProduct()
                 //Opciones que se agregaron de Sells
                 case url.endsWith('/ventas') && method === 'POST':
                     return addSell();
                 case url.endsWith('/ventas') && method === 'GET':
                         return getSells();
-                
+             /*   case url.endsWith('/ventas') && method === 'PUT':
+                    return add();*/
+                //Settings
+                case url.endsWith('/settings') && method === 'PUT':
+                    return setting();
+                case url.endsWith('/settings') && method === 'GET':
+                        return getSettings();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -75,6 +84,13 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             return ok();
         }
+        function setting() {
+            const setting = body
+            
+            localStorage.setItem('settings', JSON.stringify(settings));
+
+            return ok();
+        }
         function addProduct() {
             const product = body
 
@@ -88,14 +104,23 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             return ok();
         }
+       function updateProduct() {
+            const product = body
+
+            if (products.find(x => x.serial_number === product.serial_number)) {
+                return error('Producto "' + product.serial_number + '" ya esta en el inventario')
+            }
+            
+            //products.push(product);
+            localStorage.setItem('products', JSON.stringify(products));
+
+            return ok();
+        }
+
         function addSell() {
             const sell = body
 
-            if (sells.find(x => x.name === sell.name)) {
-                return error('Venta "' + sell.name + '" ya esta en el inventario')
-            }
-
-            sell.serial_number = sells.length ? Math.max(...sells.map(x => x.serial_number)) + 1 : 1;
+            
             sells.push(sell);
             localStorage.setItem('sells', JSON.stringify(sells));
 
@@ -113,6 +138,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function getSells() {
             if (!isLoggedIn()) return unauthorized();
             return ok(sells);
+        }
+        function getSettings() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(settings);
         }
         function deleteUser() {
             if (!isLoggedIn()) return unauthorized();

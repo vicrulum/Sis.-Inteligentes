@@ -54,7 +54,7 @@ export class CreateselldialogComponent implements OnInit {
         }
 
         this.loading = true;
-        this.sellService.add(this.sellForm.value)
+        this.sellService.addSell(this.sellForm.value)
             .pipe(first())
             .subscribe(
                 data => {
