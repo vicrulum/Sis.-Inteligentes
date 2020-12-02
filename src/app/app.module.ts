@@ -30,6 +30,8 @@ import { SellsComponent } from './pages/sells/sells.component';
 import { CreateselldialogComponent } from './pages/createselldialog/createselldialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { SuppliersComponent } from './pages/suppliers/suppliers.component';
+import { CreatesupplierdialogComponent } from './pages/createsupplierdialog/createsupplierdialog.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
@@ -37,6 +39,7 @@ const routes: Routes = [
   { path: 'product', component: ProductsComponent },
   { path: 'ventas', component: SellsComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'suppliers', component: SuppliersComponent },
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
@@ -53,6 +56,8 @@ const routes: Routes = [
     SellsComponent,
     CreateselldialogComponent,
     SettingsComponent,
+    SuppliersComponent,
+    CreatesupplierdialogComponent,
 
 
   ],

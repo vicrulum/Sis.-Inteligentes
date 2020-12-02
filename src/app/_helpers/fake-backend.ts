@@ -8,7 +8,7 @@ let users = JSON.parse(localStorage.getItem('users')) || [];
 let products = JSON.parse(localStorage.getItem('products')) || [];
 let sells = JSON.parse(localStorage.getItem('sells')) || [];
 let settings = JSON.parse(localStorage.getItem('settings')) || [];
-
+let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -50,6 +50,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return setting();
                 case url.endsWith('/settings') && method === 'GET':
                         return getSettings();
+                //Suppliers
+                case url.endsWith('/supplier') && method === 'POST':
+                    return addSupplier();
+                case url.endsWith('/supplier') && method === 'GET':
+                    return getSuppliers();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -104,6 +109,19 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             return ok();
         }
+        function addSupplier() {
+            const supplier = body
+
+            if (suppliers.find(x => x.name === supplier.name)) {
+                return error('Supplier "' + supplier.name + '" ya esta registrado')
+            }
+
+            supplier.id = suppliers.length ? Math.max(...suppliers.map(x => x.id)) + 1 : 1;
+            suppliers.push(supplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+
+            return ok();
+        }
        function updateProduct() {
             const product = body
 
@@ -142,6 +160,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function getSettings() {
             if (!isLoggedIn()) return unauthorized();
             return ok(settings);
+        }
+        function getSuppliers() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(suppliers);
         }
         function deleteUser() {
             if (!isLoggedIn()) return unauthorized();

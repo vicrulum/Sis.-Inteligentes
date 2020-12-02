@@ -10,6 +10,7 @@ import { CreateselldialogComponent } from '../createselldialog/createselldialog.
 import { Sell } from 'src/app/models/sell';
 import { SellService } from 'src/app/services/sell.service';
 import { AlertService } from 'src/app/services/alert.service';
+import swal from 'sweetalert';
 @Component({
   selector: 'app-sells',
   templateUrl: './sells.component.html',
@@ -87,7 +88,10 @@ export class SellsComponent implements OnInit {
       var initialQuantity = this.selectedProduct[i].initialValue / 2;
       console.log("initialQUantity",initialQuantity)
       if(this.newQuantity < initialQuantity){
+        swal("Alerta",'El inventario del producto '+this.selectedProduct[i].name +' ha disminuido a menos de la mitad, se enviara un correo al proveedor ' + this.selectedProduct[i].supplierContact);
+        //swal("Alerta","EL inventario de este producto ha disminuido a menos de la mitad, se enviara un correo al proveedor");
         console.log("EL inventario del producto:", this.selectedProduct[i].name ," ha disminuido a menos de la mitad, se enviara un correo al proveedor")
+
       }
       this.total= this.total + parseInt(selectedProduct[i].price);
       selectedProduct[i].quantity = this.newQuantity

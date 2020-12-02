@@ -13,72 +13,61 @@ import { Subscription } from 'rxjs';
 
 import { first } from 'rxjs/operators';
 import { ProductService } from 'src/app/services/product.service';
-export interface DialogData {
-  animal: string;
-  name: string;
-}
+import { Supplier } from 'src/app/models/supplier';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
-  selector: 'app-createproductdialog',
-  templateUrl: './createproductdialog.component.html',
-  styleUrls: ['./createproductdialog.component.scss']
+  selector: 'app-createsupplierdialog',
+  templateUrl: './createsupplierdialog.component.html',
+  styleUrls: ['./createsupplierdialog.component.scss']
 })
-export class CreateproductdialogComponent implements OnInit {
-  productname: string;
-  productprice: string;
+export class CreatesupplierdialogComponent implements OnInit {
 
-  productForm: FormGroup;
+  supplierForm: FormGroup;
   routeParams: any;
-  product: Product;
-  products: Product;
+  supplier: Supplier;
+  suppliers: Supplier;
   currentUser: User;
   currentUserSubscription: Subscription;
 
   loading = false;
   submitted = false; 
-  private _unsubscribeAll: Subject<any>;
-  
-
   constructor(
-    public dialogRef: MatDialogRef<CreateproductdialogComponent>,
+    public dialogRef: MatDialogRef<CreatesupplierdialogComponent>,
     private authenticationService: AuthenticationService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private productService: ProductService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    private supplierService: SupplierService,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
       this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
         this.currentUser = user;
     });
     }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-  
 
   ngOnInit(): void {
-    this.productForm = this.formBuilder.group({
-      serial_number: ['', Validators.required],
-      name: ['', Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
-      supplierContact: ['', Validators.required]
+    this.supplierForm = this.formBuilder.group({
+      id:      [''],
+      name:    [''],
+      email:   [''],
+      phone:   [''],
+      address: ['']
   });
   }
     // convenience getter for easy access to form fields
-    get f() { return this.productForm.controls; }
+    get f() { return this.supplierForm.controls; }
 
     onSubmit() {
         this.submitted = true;
 
         // stop here if form is invalid
-        if (this.productForm.invalid) {
+        if (this.supplierForm.invalid) {
             return;
         }
-        this.productForm.value.initialValue = this.productForm.value.quantity
+        this.supplierForm.value.initialValue = this.supplierForm.value.quantity
         this.loading = true;
-        console.log("ProductForm",this.productForm.value)
-        this.productService.add(this.productForm.value)
+        console.log("supplierForm",this.supplierForm.value)
+        this.supplierService.add(this.supplierForm.value)
             .pipe(first())
             .subscribe(
                 data => {
@@ -90,5 +79,8 @@ export class CreateproductdialogComponent implements OnInit {
                     //this.alertService.error(error);
                     this.loading = false;
                 });
+    }
+    onNoClick(): void {
+      this.dialogRef.close();
     }
 }

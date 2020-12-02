@@ -5,5 +5,6 @@ export class Product{
     price: number;
     serial_number: number;
     initialValue: number;
+    supplierContact: string;
 
 }
